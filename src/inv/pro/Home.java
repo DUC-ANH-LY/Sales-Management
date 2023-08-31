@@ -16,7 +16,7 @@ public class Home extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			gpublic void run() {
-				System.out.println("test1");
+				System.out.println("test3");
 				try {
 					Home frame = new Home();
 					frame.setVisible(true);

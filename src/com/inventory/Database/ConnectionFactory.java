@@ -42,8 +42,6 @@ public class ConnectionFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        username = "root";
-        password = "ducanhdeptrai172@#";
 
         try {
             Class.forName(driver);

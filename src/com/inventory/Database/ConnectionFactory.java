@@ -26,7 +26,7 @@ public class ConnectionFactory {
     static final String driver = "com.mysql.cj.jdbc.Driver";
     static final String url = "jdbc:mysql://localhost:3306/inventory";
     static final String username="root";
-    static final String password = "ducanhdeptrai172@#";
+    static final String password = "";
 
     Properties prop;
 

@@ -163,7 +163,7 @@ This project is a work in progress and more features are yet to be added with ne
 # Added Feature
 
 - insert image to datatable (https://www.youtube.com/watch?v=zs2DpipEW3k  || https://www.youtube.com/watch?v=gQwD5pu0oJ4) (Đức Anh)
-- dashboard ui ( https://www.youtube.com/watch?v=0fUbJDvkzBY (dark-light mode) || https://www.youtube.com/watch?v=9j23QqKEi4E (best + graph) || https://www.youtube.com/watch?v=iDFXNtFwiUA&list=PLyt2v1LVXYS3d_9Lm8cxXOY8D71GUn9Gm (most viewed) || https://www.youtube.com/watch?v=gm8KGYUNZDg&list=PLyt2v1LVXYS3d_9Lm8cxXOY8D71GUn9Gm&index=8 || https://www.youtube.com/watch?v=lQQAMx4Xiis&list=PLyt2v1LVXYS3d_9Lm8cxXOY8D71GUn9Gm&index=25)(Quang Đăng)
+- dashboard ui ( https://www.youtube.com/watch?v=0fUbJDvkzBY (dark-light mode) || https://www.youtube.com/watch?v=9j23QqKEi4E (best + graph) || https://www.youtube.com/watch?v=iDFXNtFwiUA&list=PLyt2v1LVXYS3d_9Lm8cxXOY8D71GUn9Gm (most viewed) || https://www.youtube.com/watch?v=gm8KGYUNZDg&list=PLyt2v1LVXYS3d_9Lm8cxXOY8D71GUn9Gm&index=8 || https://www.youtube.com/watch?v=lQQAMx4Xiis&list=PLyt2v1LVXYS3d_9Lm8cxXOY8D71GUn9Gm&index=25) (Quang Đăng)
 - export excel | pdf (https://www.youtube.com/watch?v=Lu9Y1y5ErKU || https://www.youtube.com/watch?v=YVmH3aqgqnA) (Hải Nam)
 - login ( https://www.youtube.com/watch?v=9WeOM2WvTQ0 (Lê Trung Thành)
 

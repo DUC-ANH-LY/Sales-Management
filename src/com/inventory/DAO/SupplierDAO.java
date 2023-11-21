@@ -100,7 +100,7 @@ public class SupplierDAO {
     // Supplier data set retrieval method
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT suppliercode, fullname, location, mobile FROM suppliers";
+            String query = "SELECT sid,suppliercode, fullname, location, mobile FROM suppliers";
             resultSet = statement.executeQuery(query);
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,6 +119,20 @@ public class SupplierDAO {
             e.printStackTrace();
         }
         return resultSet;
+    }
+    
+    // Search method
+    public int getIdbyName(String supname) throws SQLException {
+        try {
+            System.out.println(supname);
+            String query = "SELECT * FROM suppliers " +
+                    "WHERE fullname ='"+supname+"' LIMIT 1";
+            resultSet = statement.executeQuery(query);
+            System.out.println(resultSet.getInt("sid"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet.getInt("sid");
     }
 
     // Method to set/update supplier combo box

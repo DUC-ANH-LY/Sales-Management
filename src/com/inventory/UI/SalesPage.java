@@ -248,10 +248,11 @@ public class SalesPage extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(170, 170, 170)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jSeparator1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
@@ -357,7 +358,8 @@ public class SalesPage extends javax.swing.JPanel {
                 custNameLabel.setText("Name: "
                         +resultSet.getString("fullname")
                         + " | Location: "
-                        +resultSet.getString("location"));
+                        +resultSet.getString("location")+ " | Phone: "
+                        +resultSet.getString("phone"));
             else
                 custNameLabel.setText("||   Customer doesn't exist in database.   ||");
             custNameLabel.setVisible(true);
@@ -368,7 +370,7 @@ public class SalesPage extends javax.swing.JPanel {
 
     private void prodCodeTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prodCodeTextKeyReleased
         try {
-            ResultSet resultSet = new CustomerDAO().getProdName(prodCodeText.getText());
+            ResultSet resultSet = new ProductDAO().getProdName(prodCodeText.getText());
             if (resultSet.next()) {
                 prodNameLabel.setText("Name: "
                         + resultSet.getString("productname")

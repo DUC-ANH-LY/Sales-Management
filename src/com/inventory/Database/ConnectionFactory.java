@@ -19,14 +19,13 @@ import java.util.Properties;
  *
  * @author asjad
  */
-
 //Class to retrieve connection for database and login verfication.
 public class ConnectionFactory {
 
     static final String driver = "com.mysql.cj.jdbc.Driver";
     static final String url = "jdbc:mysql://localhost:3306/inventory";
-    static final String username="root";
-    static final String password = "mkcuaban";
+    static final String username = "root";
+    static final String password = "ducanhdeptrai172@#";
 
     Properties prop;
 
@@ -34,15 +33,7 @@ public class ConnectionFactory {
     Statement statement = null;
     ResultSet resultSet = null;
 
-    public ConnectionFactory(){
-        try {
-            //Username and Password saved as configurable properties to allow changes without recompilation.
-            prop = new Properties();
-            prop.loadFromXML(new FileInputStream("lib/DBCredentials.xml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public ConnectionFactory() {
         try {
             Class.forName(driver);
             conn = DriverManager.getConnection(url, username, password);
@@ -64,7 +55,7 @@ public class ConnectionFactory {
     }
 
     //Login verification method
-    public boolean checkLogin(String username, String password, String userType){
+    public boolean checkLogin(String username, String password, String userType) {
         String query = "SELECT * FROM users WHERE username='"
                 + username
                 + "' AND password='"
@@ -75,7 +66,9 @@ public class ConnectionFactory {
 
         try {
             resultSet = statement.executeQuery(query);
-            if(resultSet.next()) return true;
+            if (resultSet.next()) {
+                return true;
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -17,7 +17,7 @@ public class UserDTO {
 
     private int ID;
     private String fullName, location, phone, username, password, userType;
-
+    private String inTime, outTime;
     public String getInTime() {
         return inTime;
     }
@@ -33,8 +33,6 @@ public class UserDTO {
     public void setOutTime(String outTime) {
         this.outTime = outTime;
     }
-
-    private String inTime, outTime;
 
     public int getID() {
         return ID;

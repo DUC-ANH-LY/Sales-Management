@@ -14,10 +14,36 @@ package com.inventory.DTO;
 
 public class ProductDTO {
 
-    private int prodID, quantity, userID;
+    private int prodID, quantity, userID,supID;
+
+    public int getSupID() {
+        return supID;
+    }
+
+    public void setSupID(int supID) {
+        this.supID = supID;
+    }
     private double costPrice, sellPrice;
     private Double totalCost, totalRevenue;
     private String prodCode, prodName, date, suppCode, custCode, custName, brand;
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+    private byte[] picture;
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
 
     public int getProdID() {
         return prodID;

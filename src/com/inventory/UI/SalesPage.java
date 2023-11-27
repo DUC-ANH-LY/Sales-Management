@@ -8,16 +8,38 @@ package com.inventory.UI;
 import com.inventory.DAO.CustomerDAO;
 import com.inventory.DAO.ProductDAO;
 import com.inventory.DTO.ProductDTO;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
  * @author asjad
  */
 public class SalesPage extends javax.swing.JPanel {
+
+    private static Object e;
 
     String username;
     Dashboard dashboard;
@@ -27,7 +49,6 @@ public class SalesPage extends javax.swing.JPanel {
     /**
      * Creates new form SalesPage
      */
-    
     public SalesPage(String username, Dashboard dashboard) {
         initComponents();
         this.username = username;
@@ -69,6 +90,7 @@ public class SalesPage extends javax.swing.JPanel {
         salesTable = new javax.swing.JTable();
         searchText = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        Export = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         jLabel1.setText("SALES");
@@ -158,7 +180,7 @@ public class SalesPage extends javax.swing.JPanel {
                     .addGroup(sellPanelLayout.createSequentialGroup()
                         .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))
+                        .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
                     .addGroup(sellPanelLayout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -239,47 +261,65 @@ public class SalesPage extends javax.swing.JPanel {
 
         jLabel7.setText("Search:");
 
+        Export.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        Export.setText("Export");
+        Export.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Export.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(170, 170, 170)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jSeparator1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sellPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGap(12, 12, 12)
+                        .addComponent(Export, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(sellPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(jLabel7))
+                            .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Export))
+                        .addGap(18, 18, 18)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(sellPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        if (salesTable.getSelectedRow()<0)
+        if (salesTable.getSelectedRow() < 0)
             JOptionPane.showMessageDialog(this, "Please select an entry from the table you wish to delete.");
         else {
             int opt = JOptionPane.showConfirmDialog(
@@ -289,9 +329,9 @@ public class SalesPage extends javax.swing.JPanel {
                     JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 new ProductDAO().deleteSaleDAO(Integer.parseInt(
-                        salesTable.getValueAt(salesTable.getSelectedRow(),0).toString()));
+                        salesTable.getValueAt(salesTable.getSelectedRow(), 0).toString()));
                 new ProductDAO().editSoldStock(
-                        salesTable.getValueAt(salesTable.getSelectedRow(),1).toString(), quantity);
+                        salesTable.getValueAt(salesTable.getSelectedRow(), 1).toString(), quantity);
                 loadDataSet();
             }
         }
@@ -316,7 +356,7 @@ public class SalesPage extends javax.swing.JPanel {
 
     private void sellButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellButtonActionPerformed
         if (custCodeText.getText().equals("") || prodCodeText.getText().equals("")
-                || jDateChooser1.getDate()==null || quantityText.getText().equals("") || priceText.getText().equals(""))
+                || jDateChooser1.getDate() == null || quantityText.getText().equals("") || priceText.getText().equals(""))
             JOptionPane.showMessageDialog(this, "Please fill all the required fields.");
         else {
             try {
@@ -332,9 +372,10 @@ public class SalesPage extends javax.swing.JPanel {
                     productDTO.setQuantity(Integer.parseInt(quantityText.getText()));
                     new ProductDAO().sellProductDAO(productDTO, username);
                     loadDataSet();
-                } else
-                    JOptionPane.showMessageDialog(this, "This customer does not exist.\n" +
-                            "Add new customer or use a valid customer code.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "This customer does not exist.\n"
+                            + "Add new customer or use a valid customer code.");
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -345,8 +386,9 @@ public class SalesPage extends javax.swing.JPanel {
         int row = salesTable.getSelectedRow();
         int col = salesTable.getColumnCount();
         Object[] data = new Object[col];
-        for (int i=0; i<col; i++)
+        for (int i = 0; i < col; i++) {
             data[i] = salesTable.getValueAt(row, i);
+        }
         quantity = Integer.parseInt(data[3].toString());
         prodCode = data[1].toString();
     }//GEN-LAST:event_salesTableMouseClicked
@@ -354,14 +396,15 @@ public class SalesPage extends javax.swing.JPanel {
     private void custCodeTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCodeTextKeyReleased
         try {
             ResultSet resultSet = new CustomerDAO().getCustName(custCodeText.getText());
-            if (resultSet.next())
+            if (resultSet.next()) {
                 custNameLabel.setText("Name: "
-                        +resultSet.getString("fullname")
+                        + resultSet.getString("fullname")
                         + " | Location: "
-                        +resultSet.getString("location")+ " | Phone: "
-                        +resultSet.getString("phone"));
-            else
+                        + resultSet.getString("location") + " | Phone: "
+                        + resultSet.getString("phone"));
+            } else {
                 custNameLabel.setText("||   Customer doesn't exist in database.   ||");
+            }
             custNameLabel.setVisible(true);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -378,8 +421,9 @@ public class SalesPage extends javax.swing.JPanel {
                         + resultSet.getString("quantity"));
                 Double sellPrice = new ProductDAO().getProdSell(prodCodeText.getText());
                 priceText.setText(sellPrice.toString());
-            } else
+            } else {
                 prodNameLabel.setText("||   Product doesn't exist in Inventory.  ||");
+            }
             prodNameLabel.setVisible(true);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -389,6 +433,195 @@ public class SalesPage extends javax.swing.JPanel {
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
         loadSearchData(searchText.getText());
     }//GEN-LAST:event_searchTextKeyReleased
+
+    private void ExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ExportActionPerformed
+
+    private void exportToExcel(XSSFWorkbook workbook, File file) {
+        try (FileOutputStream fis = new FileOutputStream(file)) {
+            workbook.write(fis);
+            JOptionPane.showMessageDialog(this, "Exported successfully!");
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error");
+        }
+    }
+
+    public static void exportToPDFBox(File file, JTable salesTable, float[] columnWidths) throws IOException {
+        PDDocument document = new PDDocument();
+        PDPage page;
+        page = new PDPage(PDRectangle.A4);
+        document.addPage(page);
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+        float margin = 20;
+        float yStart = page.getMediaBox().getHeight() - margin;
+        float tableWidth = page.getMediaBox().getWidth() - 2 * margin;
+        float yPosition = yStart;
+        float bottomMargin = 70;
+        float yStartNewPage = page.getMediaBox().getHeight() - margin;
+        boolean drawContent = true;
+        float lineHeight = 15;
+        float cellMargin = 2f;
+
+        List<List<String>> tableData = new ArrayList<>();
+
+        // Thêm dòng tiêu đề
+        List<String> headerRow = new ArrayList<>();
+        headerRow.add("STT");
+        headerRow.add("SALESID");
+        headerRow.add("PRODUCTCODE");
+        headerRow.add("PRODUCTNAME");
+        headerRow.add("QUANTITY");
+        headerRow.add("REVENUE");
+        headerRow.add("NAME");
+        tableData.add(headerRow);
+
+        int rowCount = salesTable.getRowCount();
+        int colCount = salesTable.getColumnCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            List<String> dataRow = new ArrayList<>();
+            dataRow.add(String.valueOf(i + 1));
+
+            for (int col = 0; col < colCount; col++) {
+                Object cellValue = salesTable.getValueAt(i, col);
+                dataRow.add(cellValue.toString());
+            }
+
+            tableData.add(dataRow);
+        }
+
+        drawTable(page, contentStream, yStart, tableWidth, yStartNewPage, bottomMargin, lineHeight, cellMargin, drawContent, tableData, columnWidths);
+
+        contentStream.close();
+
+        try {
+            document.save(file);
+            JOptionPane.showMessageDialog(null, "Exported successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error");
+        } finally {
+            document.close();
+        }
+    }
+
+    private static void drawTable(PDPage page, PDPageContentStream contentStream, float yStart, float tableWidth,
+            float yPosition, float bottomMargin, float lineHeight, float cellMargin, boolean drawContent,
+            List<List<String>> tableData, float[] columnWidths) throws IOException {
+        float margin = 20;
+        float yStartNewPage = page.getMediaBox().getHeight() - margin;
+        float tableBottomY = yStartNewPage - tableData.size() * lineHeight;
+
+        // Calculate the required table height
+        float rowHeight = 20;
+        float tableHeight = rowHeight * tableData.size();
+
+        // Adjust table height if it exceeds the available space
+        if (tableHeight > (yStartNewPage - bottomMargin - yPosition)) {
+            tableHeight = yStartNewPage - bottomMargin - yPosition;
+        }
+
+        // Draw horizontal line at the top
+        contentStream.moveTo(margin, yStartNewPage);
+        contentStream.lineTo(margin + tableWidth, yStartNewPage);
+        contentStream.stroke();
+
+        // Draw table content
+        if (drawContent) {
+            contentStream.setLineWidth(1f);
+            float yPositionNewPage = yStartNewPage;
+
+            for (List<String> rowData : tableData) {
+                // Vẽ đường kẻ dọc cho cột STT
+                contentStream.moveTo(margin, yPositionNewPage);
+                contentStream.lineTo(margin, yPositionNewPage - rowHeight);
+
+                float xPosition = margin; // Khởi tạo xPosition với giá trị margin
+
+                for (int j = 0; j < rowData.size(); j++) {
+                    // Vẽ đường kẻ dọc từ xPosition đến xPosition + columnWidths[j]
+                    contentStream.moveTo(xPosition + columnWidths[j], yPositionNewPage);
+                    contentStream.lineTo(xPosition + columnWidths[j], yPositionNewPage - rowHeight);
+
+                    // Vẽ text trong ô
+                    String text = rowData.get(j);
+                    contentStream.beginText();
+                    contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+                    contentStream.newLineAtOffset(xPosition + cellMargin, yPositionNewPage - 15);
+                    contentStream.showText(text);
+                    contentStream.endText();
+
+                    // Cập nhật xPosition cho cột tiếp theo
+                    xPosition += columnWidths[j];
+                }
+
+                // Draw horizontal line at the bottom, extending only up to the last column
+                contentStream.moveTo(margin, yPositionNewPage - rowHeight);
+                contentStream.lineTo(xPosition, yPositionNewPage - rowHeight);
+
+                yPositionNewPage -= rowHeight;
+            }
+
+            // Draw vertical line at the end of the last row
+            contentStream.moveTo(margin + tableWidth, yPositionNewPage + rowHeight);
+            contentStream.lineTo(margin + tableWidth, yPositionNewPage);
+
+            contentStream.stroke();
+        }
+    }
+
+    private String getFileExtension(File file) {
+        String fileName = file.getName();
+        int lastDotIndex = fileName.lastIndexOf(".");
+        if (lastDotIndex != -1 && lastDotIndex < fileName.length() - 1) {
+            return fileName.substring(lastDotIndex + 1).toLowerCase();
+        }
+        return "";
+    }
+
+    private File showFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Thêm bộ lọc cho phép chọn tệp với phần mở rộng là ".xlsx" hoặc ".pdf"
+        FileNameExtensionFilter excelFilter = new FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx");
+        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Files (*.pdf)", "pdf");
+        fileChooser.addChoosableFileFilter(excelFilter);
+        fileChooser.addChoosableFileFilter(pdfFilter);
+
+        // Set bộ lọc mặc định là ".xlsx"
+        fileChooser.setFileFilter(excelFilter);
+
+        int option = fileChooser.showSaveDialog(this);
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            // Kiểm tra phần mở rộng của tệp đã chọn và thêm nó nếu cần
+            String extension = "";
+
+            // Kiểm tra xem người dùng đã chọn bộ lọc PDF hay không
+            if (fileChooser.getFileFilter().equals(pdfFilter)) {
+                extension = ".pdf";
+            } else {
+                extension = ".xlsx";
+            }
+
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(extension)) {
+                selectedFile = new File(filePath + extension);
+            }
+
+            return selectedFile;
+        } else {
+            return null;
+        }
+    }
 
     // Method to load data into table
     public void loadDataSet() {
@@ -411,6 +644,7 @@ public class SalesPage extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Export;
     private javax.swing.JButton addCustButton;
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField custCodeText;

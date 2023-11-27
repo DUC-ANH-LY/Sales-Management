@@ -11,8 +11,16 @@ import java.io.*;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -116,30 +124,31 @@ public class CustomerPage extends javax.swing.JPanel {
         entryPanelLayout.setHorizontalGroup(
             entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(entryPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(entryPanelLayout.createSequentialGroup()
-                        .addComponent(addButton)
+                        .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteButton)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(locationText, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nameText, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(codeText)
+                            .addComponent(phoneText)))
+                    .addGroup(entryPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(entryPanelLayout.createSequentialGroup()
+                                .addComponent(addButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(editButton)
+                                .addGap(12, 12, 12)
+                                .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)))))
                 .addContainerGap())
-            .addGroup(entryPanelLayout.createSequentialGroup()
-                .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(phoneText)
-                    .addComponent(locationText)
-                    .addComponent(nameText)
-                    .addComponent(codeText, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
         entryPanelLayout.setVerticalGroup(
             entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,7 +176,7 @@ public class CustomerPage extends javax.swing.JPanel {
                     .addComponent(deleteButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         custTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -210,41 +219,49 @@ public class CustomerPage extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(205, 205, 205)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(ExportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jSeparator1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(205, 205, 205)
+                                .addComponent(jLabel8)
+                                .addGap(6, 6, 6)
+                                .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(ExportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel8)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel8))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addComponent(ExportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(entryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(59, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(entryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -324,14 +341,15 @@ public class CustomerPage extends javax.swing.JPanel {
         loadSearchData(searchText.getText());
     }//GEN-LAST:event_searchTextKeyReleased
 
+
     private void ExportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportButtonActionPerformed
         try {
-            XSSFWorkbook wordkbook = new XSSFWorkbook();
-            XSSFSheet sheet = wordkbook.createSheet("customer");
+            XSSFWorkbook wordbook = new XSSFWorkbook();
+            XSSFSheet sheet = wordbook.createSheet("Customer Info");
             XSSFRow row = null;
             Cell cell = null;
 
-            XSSFCellStyle borderStyle = wordkbook.createCellStyle();
+            XSSFCellStyle borderStyle = wordbook.createCellStyle();
             borderStyle.setBorderTop(BorderStyle.THIN);
             borderStyle.setBorderBottom(BorderStyle.THIN);
             borderStyle.setBorderLeft(BorderStyle.THIN);
@@ -381,25 +399,211 @@ public class CustomerPage extends javax.swing.JPanel {
                     }
                 }
             }
+            float[] columnWidths = {35, 120, 120, 90, 100};
             File f = showFileChooser();
-            try {
-                FileOutputStream fis = new FileOutputStream(f);
-                wordkbook.write(fis);
-                fis.close();
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace();
+            if (f != null) {
+                // Kiểm tra phần mở rộng của tệp đã chọn
+                String fileExtension = getFileExtension(f);
 
-            } catch (IOException ex) {
-                ex.printStackTrace();
+                if ("xlsx".equalsIgnoreCase(fileExtension)) {
+                    // Export ra file Excel (.xlsx)
+                    exportToExcel(wordbook, f);
+                } else if ("pdf".equalsIgnoreCase(fileExtension)) {
+                    // Export ra file PDF (.pdf) bằng Apache PDFBox
+                    exportToPDFBox(f, custTable, columnWidths);
+                } else {
+                    // Định dạng không hỗ trợ
+                    JOptionPane.showMessageDialog(this, "Unsupported file format");
+                }
             }
-
-            JOptionPane.showMessageDialog(this, "Exported successfully!");
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error");
+            JOptionPane.showMessageDialog(this, "Error!");
         }
     }//GEN-LAST:event_ExportButtonActionPerformed
+
+    private void exportToExcel(XSSFWorkbook workbook, File file) {
+        try (FileOutputStream fis = new FileOutputStream(file)) {
+            workbook.write(fis);
+            JOptionPane.showMessageDialog(this, "Exported successfully!");
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error");
+        }
+    }
+
+    public static void exportToPDFBox(File file, JTable custTable, float[] columnWidths) throws IOException {
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+        document.addPage(page);
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+        float margin = 65;
+        float yStart = page.getMediaBox().getHeight() - margin;
+        float tableWidth = page.getMediaBox().getWidth() - 2 * margin;
+        float yPosition = yStart;
+        float bottomMargin = 70;
+        float yStartNewPage = page.getMediaBox().getHeight() - margin;
+        boolean drawContent = true;
+        float lineHeight = 15;
+        float cellMargin = 2f;
+
+        List<List<String>> tableData = new ArrayList<>();
+
+        // Thêm dòng tiêu đề
+        List<String> headerRow = new ArrayList<>();
+        headerRow.add("STT");
+        headerRow.add("CUSTOMERCODE");
+        headerRow.add("FULLNAME");
+        headerRow.add("LOCATION");
+        headerRow.add("PHONE");
+        tableData.add(headerRow);
+
+        int rowCount = custTable.getRowCount();
+        int colCount = custTable.getColumnCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            List<String> dataRow = new ArrayList<>();
+            dataRow.add(String.valueOf(i + 1));
+
+            for (int col = 0; col < colCount; col++) {
+                Object cellValue = custTable.getValueAt(i, col);
+                dataRow.add(cellValue.toString());
+            }
+
+            tableData.add(dataRow);
+        }
+
+        drawTable(page, contentStream, yStart, tableWidth, yStartNewPage, bottomMargin, lineHeight, cellMargin, drawContent, tableData, columnWidths);
+
+        contentStream.close();
+
+        try {
+            document.save(file);
+            JOptionPane.showMessageDialog(null, "Exported successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error");
+        } finally {
+            document.close();
+        }
+    }
+
+    private static void drawTable(PDPage page, PDPageContentStream contentStream, float yStart, float tableWidth,
+            float yPosition, float bottomMargin, float lineHeight, float cellMargin, boolean drawContent,
+            List<List<String>> tableData, float[] columnWidths) throws IOException {
+        float margin = 65;
+        float yStartNewPage = page.getMediaBox().getHeight() - margin;
+        float tableBottomY = yStartNewPage - tableData.size() * lineHeight;
+
+        // Calculate the required table height
+        float rowHeight = 20;
+        float tableHeight = rowHeight * tableData.size();
+
+        // Adjust table height if it exceeds the available space
+        if (tableHeight > (yStartNewPage - bottomMargin - yPosition)) {
+            tableHeight = yStartNewPage - bottomMargin - yPosition;
+        }
+
+        // Draw horizontal line at the top
+        contentStream.moveTo(margin, yStartNewPage);
+        contentStream.lineTo(margin + tableWidth, yStartNewPage);
+        contentStream.stroke();
+
+        // Draw table content
+        if (drawContent) {
+            contentStream.setLineWidth(1f);
+            float yPositionNewPage = yStartNewPage;
+
+            for (List<String> rowData : tableData) {
+                // Vẽ đường kẻ dọc cho cột STT
+                contentStream.moveTo(margin, yPositionNewPage);
+                contentStream.lineTo(margin, yPositionNewPage - rowHeight);
+
+                float xPosition = margin; // Khởi tạo xPosition với giá trị margin
+
+                for (int j = 0; j < rowData.size(); j++) {
+                    // Vẽ đường kẻ dọc từ xPosition đến xPosition + columnWidths[j]
+                    contentStream.moveTo(xPosition + columnWidths[j], yPositionNewPage);
+                    contentStream.lineTo(xPosition + columnWidths[j], yPositionNewPage - rowHeight);
+
+                    // Vẽ text trong ô
+                    String text = rowData.get(j);
+                    contentStream.beginText();
+                    contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+                    contentStream.newLineAtOffset(xPosition + cellMargin, yPositionNewPage - 15);
+                    contentStream.showText(text);
+                    contentStream.endText();
+
+                    // Cập nhật xPosition cho cột tiếp theo
+                    xPosition += columnWidths[j];
+                }
+
+                // Draw horizontal line at the bottom, extending only up to the last column
+                contentStream.moveTo(margin, yPositionNewPage - rowHeight);
+                contentStream.lineTo(xPosition, yPositionNewPage - rowHeight);
+
+                yPositionNewPage -= rowHeight;
+            }
+
+            // Draw vertical line at the end of the last row
+            contentStream.moveTo(margin + tableWidth, yPositionNewPage + rowHeight);
+            contentStream.lineTo(margin + tableWidth, yPositionNewPage);
+
+            contentStream.stroke();
+        }
+    }
+
+    private String getFileExtension(File file) {
+        String fileName = file.getName();
+        int lastDotIndex = fileName.lastIndexOf(".");
+        if (lastDotIndex != -1 && lastDotIndex < fileName.length() - 1) {
+            return fileName.substring(lastDotIndex + 1).toLowerCase();
+        }
+        return "";
+    }
+
+    private File showFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Thêm bộ lọc cho phép chọn tệp với phần mở rộng là ".xlsx" hoặc ".pdf"
+        FileNameExtensionFilter excelFilter = new FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx");
+        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Files (*.pdf)", "pdf");
+        fileChooser.addChoosableFileFilter(excelFilter);
+        fileChooser.addChoosableFileFilter(pdfFilter);
+
+        // Set bộ lọc mặc định là ".xlsx"
+        fileChooser.setFileFilter(excelFilter);
+
+        int option = fileChooser.showSaveDialog(this);
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            // Kiểm tra phần mở rộng của tệp đã chọn và thêm nó nếu cần
+            String extension = "";
+
+            // Kiểm tra xem người dùng đã chọn bộ lọc PDF hay không
+            if (fileChooser.getFileFilter().equals(pdfFilter)) {
+                extension = ".pdf";
+            } else {
+                extension = ".xlsx";
+            }
+
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(extension)) {
+                selectedFile = new File(filePath + extension);
+            }
+
+            return selectedFile;
+        } else {
+            return null;
+        }
+    }
 
     public void loadDataSet() {
         try {
@@ -419,30 +623,7 @@ public class CustomerPage extends javax.swing.JPanel {
         }
     }
 
-    private File showFileChooser() {
-        JFileChooser fileChooser = new JFileChooser();
-
-        // Thêm bộ lọc cho phép chọn tệp với phần mở rộng là ".xlsx"
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx");
-        fileChooser.setFileFilter(filter);
-
-        int option = fileChooser.showSaveDialog(this);
-
-        if (option == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-
-            // Kiểm tra nếu phần mở rộng là ".xlsx", nếu không, thêm nó vào
-            String filePath = selectedFile.getAbsolutePath();
-            if (!filePath.toLowerCase().endsWith(".xlsx")) {
-                selectedFile = new File(filePath + ".xlsx");
-            }
-
-            return selectedFile;
-        } else {
-            return null;
-        }
-    }
-
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ExportButton;

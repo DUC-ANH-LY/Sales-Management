@@ -7,9 +7,29 @@ package com.inventory.UI;
 
 import com.inventory.DAO.SupplierDAO;
 import com.inventory.DTO.SupplierDTO;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -53,6 +73,7 @@ public class SupplierPage extends javax.swing.JPanel {
         suppTable = new javax.swing.JTable();
         searchText = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        clearButton1 = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         jLabel1.setText("SUPPLIERS");
@@ -111,7 +132,7 @@ public class SupplierPage extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                        .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -129,8 +150,7 @@ public class SupplierPage extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(codeText)
-                            .addComponent(nameText))))
-                .addContainerGap())
+                            .addComponent(nameText)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,7 +178,7 @@ public class SupplierPage extends javax.swing.JPanel {
                     .addComponent(editButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clearButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         suppTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -188,6 +208,15 @@ public class SupplierPage extends javax.swing.JPanel {
 
         jLabel8.setText("Search:");
 
+        clearButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        clearButton1.setText("Export");
+        clearButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        clearButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,19 +224,24 @@ public class SupplierPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(152, 152, 152)
-                        .addComponent(jLabel8)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(clearButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,14 +250,15 @@ public class SupplierPage extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabel8)
+                    .addComponent(clearButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -232,8 +267,9 @@ public class SupplierPage extends javax.swing.JPanel {
         int col = suppTable.getColumnCount();
         Object[] data = new Object[col];
 
-        for (int i=0; i<col; i++)
+        for (int i = 0; i < col; i++) {
             data[i] = suppTable.getValueAt(row, i);
+        }
         codeText.setText((String) data[0]);
         nameText.setText((String) data[1]);
         locationText.setText((String) data[2]);
@@ -256,13 +292,13 @@ public class SupplierPage extends javax.swing.JPanel {
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        if (suppTable.getSelectedRow()<0)
+        if (suppTable.getSelectedRow() < 0)
             JOptionPane.showMessageDialog(this, "Please select an entry to edit from the table.");
         else {
             if (codeText.getText().equals("") || nameText.getText().equals("")
-                    || locationText.getText().equals("") || phoneText.getText().equals(""))
+                    || locationText.getText().equals("") || phoneText.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "Please enter all the required details.");
-            else {
+            } else {
                 SupplierDTO supplierDTO = new SupplierDTO();
                 supplierDTO.setSuppCode(codeText.getText());
                 supplierDTO.setFullName(nameText.getText());
@@ -275,7 +311,7 @@ public class SupplierPage extends javax.swing.JPanel {
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        if (suppTable.getSelectedRow()<0)
+        if (suppTable.getSelectedRow() < 0)
             JOptionPane.showMessageDialog(this, "Please select an entry from the table to be deleted.");
         else {
             int opt = JOptionPane.showConfirmDialog(
@@ -283,8 +319,8 @@ public class SupplierPage extends javax.swing.JPanel {
                     "Are you sure you want to delete this supplier?",
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION);
-            if (opt==JOptionPane.YES_OPTION) {
-                new SupplierDAO().deleteSupplierDAO(suppTable.getValueAt(suppTable.getSelectedRow(),0).toString());
+            if (opt == JOptionPane.YES_OPTION) {
+                new SupplierDAO().deleteSupplierDAO(suppTable.getValueAt(suppTable.getSelectedRow(), 0).toString());
                 loadDataSet();
             }
         }
@@ -303,6 +339,9 @@ public class SupplierPage extends javax.swing.JPanel {
         loadSearchData(text);
     }//GEN-LAST:event_searchTextKeyReleased
 
+    private void clearButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_clearButton1ActionPerformed
 
     // Method to load data into table
     public void loadDataSet() {
@@ -324,9 +363,194 @@ public class SupplierPage extends javax.swing.JPanel {
         }
     }
 
+    private void exportToExcel(XSSFWorkbook workbook, File file) {
+        try (FileOutputStream fis = new FileOutputStream(file)) {
+            workbook.write(fis);
+            JOptionPane.showMessageDialog(this, "Exported successfully!");
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error");
+        }
+    }
+
+    public static void exportToPDFBox(File file, JTable suppTable, float[] columnWidths) throws IOException {
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+        document.addPage(page);
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+        float margin = 55;
+        float yStart = page.getMediaBox().getHeight() - margin;
+        float tableWidth = page.getMediaBox().getWidth() - 2 * margin;
+        float yPosition = yStart;
+        float bottomMargin = 70;
+        float yStartNewPage = page.getMediaBox().getHeight() - margin;
+        boolean drawContent = true;
+        float lineHeight = 15;
+        float cellMargin = 2f;
+
+        List<List<String>> tableData = new ArrayList<>();
+
+        // Thêm dòng tiêu đề
+        List<String> headerRow = new ArrayList<>();
+        headerRow.add("STT");
+        headerRow.add("SID");
+
+        headerRow.add("SUPPLIERCODE");
+        headerRow.add("FULLNAME");
+        headerRow.add("LOCATION");
+        headerRow.add("MOBILE");
+        tableData.add(headerRow);
+
+        int rowCount = suppTable.getRowCount();
+        int colCount = suppTable.getColumnCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            List<String> dataRow = new ArrayList<>();
+            dataRow.add(String.valueOf(i + 1));
+
+            for (int col = 0; col < colCount; col++) {
+                Object cellValue = suppTable.getValueAt(i, col);
+                dataRow.add(cellValue.toString());
+            }
+
+            tableData.add(dataRow);
+        }
+
+        drawTable(page, contentStream, yStart, tableWidth, yStartNewPage, bottomMargin, lineHeight, cellMargin, drawContent, tableData, columnWidths);
+
+        contentStream.close();
+
+        try {
+            document.save(file);
+            JOptionPane.showMessageDialog(null, "Exported successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error");
+        } finally {
+            document.close();
+        }
+    }
+
+    private static void drawTable(PDPage page, PDPageContentStream contentStream, float yStart, float tableWidth,
+            float yPosition, float bottomMargin, float lineHeight, float cellMargin, boolean drawContent,
+            List<List<String>> tableData, float[] columnWidths) throws IOException {
+        float margin = 55;
+        float yStartNewPage = page.getMediaBox().getHeight() - margin;
+        float tableBottomY = yStartNewPage - tableData.size() * lineHeight;
+
+        // Calculate the required table height
+        float rowHeight = 20;
+        float tableHeight = rowHeight * tableData.size();
+
+        // Adjust table height if it exceeds the available space
+        if (tableHeight > (yStartNewPage - bottomMargin - yPosition)) {
+            tableHeight = yStartNewPage - bottomMargin - yPosition;
+        }
+
+        // Draw horizontal line at the top
+        contentStream.moveTo(margin, yStartNewPage);
+        contentStream.lineTo(margin + tableWidth, yStartNewPage);
+        contentStream.stroke();
+
+        // Draw table content
+        if (drawContent) {
+            contentStream.setLineWidth(1f);
+            float yPositionNewPage = yStartNewPage;
+
+            for (List<String> rowData : tableData) {
+                // Vẽ đường kẻ dọc cho cột STT
+                contentStream.moveTo(margin, yPositionNewPage);
+                contentStream.lineTo(margin, yPositionNewPage - rowHeight);
+
+                float xPosition = margin; // Khởi tạo xPosition với giá trị margin
+
+                for (int j = 0; j < rowData.size(); j++) {
+                    // Vẽ đường kẻ dọc từ xPosition đến xPosition + columnWidths[j]
+                    contentStream.moveTo(xPosition + columnWidths[j], yPositionNewPage);
+                    contentStream.lineTo(xPosition + columnWidths[j], yPositionNewPage - rowHeight);
+
+                    // Vẽ text trong ô
+                    String text = rowData.get(j);
+                    contentStream.beginText();
+                    contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+                    contentStream.newLineAtOffset(xPosition + cellMargin, yPositionNewPage - 15);
+                    contentStream.showText(text);
+                    contentStream.endText();
+
+                    // Cập nhật xPosition cho cột tiếp theo
+                    xPosition += columnWidths[j];
+                }
+
+                // Draw horizontal line at the bottom, extending only up to the last column
+                contentStream.moveTo(margin, yPositionNewPage - rowHeight);
+                contentStream.lineTo(xPosition, yPositionNewPage - rowHeight);
+
+                yPositionNewPage -= rowHeight;
+            }
+
+            // Draw vertical line at the end of the last row
+            contentStream.moveTo(margin + tableWidth, yPositionNewPage + rowHeight);
+            contentStream.lineTo(margin + tableWidth, yPositionNewPage);
+
+            contentStream.stroke();
+        }
+    }
+
+    private String getFileExtension(File file) {
+        String fileName = file.getName();
+        int lastDotIndex = fileName.lastIndexOf(".");
+        if (lastDotIndex != -1 && lastDotIndex < fileName.length() - 1) {
+            return fileName.substring(lastDotIndex + 1).toLowerCase();
+        }
+        return "";
+    }
+
+    private File showFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Thêm bộ lọc cho phép chọn tệp với phần mở rộng là ".xlsx" hoặc ".pdf"
+        FileNameExtensionFilter excelFilter = new FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx");
+        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Files (*.pdf)", "pdf");
+        fileChooser.addChoosableFileFilter(excelFilter);
+        fileChooser.addChoosableFileFilter(pdfFilter);
+
+        // Set bộ lọc mặc định là ".xlsx"
+        fileChooser.setFileFilter(excelFilter);
+
+        int option = fileChooser.showSaveDialog(this);
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            // Kiểm tra phần mở rộng của tệp đã chọn và thêm nó nếu cần
+            String extension = "";
+
+            // Kiểm tra xem người dùng đã chọn bộ lọc PDF hay không
+            if (fileChooser.getFileFilter().equals(pdfFilter)) {
+                extension = ".pdf";
+            } else {
+                extension = ".xlsx";
+            }
+
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(extension)) {
+                selectedFile = new File(filePath + extension);
+            }
+
+            return selectedFile;
+        } else {
+            return null;
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton clearButton;
+    private javax.swing.JButton clearButton1;
     private javax.swing.JTextField codeText;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;

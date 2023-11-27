@@ -9,7 +9,7 @@ import com.inventory.DAO.ProductDAO;
 import com.inventory.DAO.SupplierDAO;
 import com.inventory.DTO.ProductDTO;
 import com.toedter.calendar.*;
-import java.awt.*;
+import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +18,6 @@ import javax.swing.*;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -33,8 +32,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
@@ -135,12 +142,8 @@ public class ProductPage extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         export = new javax.swing.JButton();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         jLabel1.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         jLabel1.setText("PRODUCTS");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 126, 41));
-        add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 53, 1297, 10));
 
         entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter Product Details"));
 
@@ -322,7 +325,7 @@ public class ProductPage extends javax.swing.JPanel {
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, entryPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                         .addComponent(lbl_image, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(addButton1)
@@ -334,8 +337,6 @@ public class ProductPage extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clearButton))
         );
-
-        add(entryPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 69, -1, 552));
 
         productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -356,8 +357,6 @@ public class ProductPage extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(productTable);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 69, 938, 552));
-
         refreshButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         refreshButton.setText("REFRESH");
         refreshButton.addActionListener(new java.awt.event.ActionListener() {
@@ -365,17 +364,14 @@ public class ProductPage extends javax.swing.JPanel {
                 refreshButtonActionPerformed(evt);
             }
         });
-        add(refreshButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(364, 17, -1, 29));
 
         searchText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchTextKeyReleased(evt);
             }
         });
-        add(searchText, new org.netbeans.lib.awtextra.AbsoluteConstraints(188, 20, 158, -1));
 
         jLabel9.setText("Search:");
-        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(144, 23, -1, -1));
 
         export.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         export.setText("EXPORT");
@@ -384,7 +380,55 @@ public class ProductPage extends javax.swing.JPanel {
                 exportActionPerformed(evt);
             }
         });
-        add(export, new org.netbeans.lib.awtextra.AbsoluteConstraints(462, 17, -1, 29));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel9)
+                        .addGap(6, 6, 6)
+                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(refreshButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(export))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 938, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel9))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(export, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(6, 6, 6)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 552, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     //static String productName;
@@ -512,7 +556,6 @@ public class ProductPage extends javax.swing.JPanel {
                 productDTO.setSellPrice(Double.parseDouble(sellText.getText()));
                 productDTO.setBrand(suppCombo.getSelectedItem().toString());
                 productDTO.setImage(ImgPath);
-                System.out.println(productDTO.getImage());
                 productDTO.setUserID(userID);
 
                 try {
@@ -567,7 +610,7 @@ public class ProductPage extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             XSSFWorkbook wordbook = new XSSFWorkbook();
-            XSSFSheet sheet = wordbook.createSheet("products");
+            XSSFSheet sheet = wordbook.createSheet("Product Info");
             XSSFRow row = null;
             Cell cell = null;
 
@@ -602,7 +645,7 @@ public class ProductPage extends javax.swing.JPanel {
             cell = row.createCell(5, CellType.STRING);
             cell.setCellValue("BRAND");
             cell.setCellStyle(borderStyle);
-            
+
             cell = row.createCell(6, CellType.STRING);
             cell.setCellValue("QUANTITY");
             cell.setCellStyle(borderStyle);
@@ -632,34 +675,30 @@ public class ProductPage extends javax.swing.JPanel {
                     }
                 }
             }
-            // Lấy đường dẫn tương đối của thư mục làm việc của chương trình
-            //String userDir = System.getProperty("user.dir");
-            //String excelFolder = userDir + File.separator + "excel";
-            //File file = excelFolder + File.separator + "products.xlsx";
 
-            //File excelDir = new File(excelFolder);
-            //if (!excelDir.exists()) {
-            //   excelDir.mkdirs(); // Tạo thư mục 'excel' nếu nó chưa tồn tại
-            //}
-            //File f = new File(filePath);
+            float[] columnWidths = {25, 100, 100, 100, 100, 250, 100, 100};
             File f = showFileChooser();
-            try {
-                FileOutputStream fis = new FileOutputStream(f);
-                wordbook.write(fis);
-                fis.close();
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace();
+            if (f != null) {
+                // Kiểm tra phần mở rộng của tệp đã chọn
+                String fileExtension = getFileExtension(f);
 
-            } catch (IOException ex) {
-                ex.printStackTrace();
+                if ("xlsx".equalsIgnoreCase(fileExtension)) {
+                    // Export ra file Excel (.xlsx)
+                    exportToExcel(wordbook, f);
+                } else if ("pdf".equalsIgnoreCase(fileExtension)) {
+                    // Export ra file PDF (.pdf) bằng Apache PDFBox
+                    exportToPDFBox(f, productTable, columnWidths);
+                } else {
+                    // Định dạng không hỗ trợ
+                    JOptionPane.showMessageDialog(this, "Unsupported file format");
+                }
             }
-
-            JOptionPane.showMessageDialog(this, "Exported successfully!");
 
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error!");
         }
+
     }//GEN-LAST:event_exportActionPerformed
 
     String ImgPath = null;
@@ -674,22 +713,189 @@ public class ProductPage extends javax.swing.JPanel {
         }
     }
 
+    private void exportToExcel(XSSFWorkbook workbook, File file) {
+        try (FileOutputStream fis = new FileOutputStream(file)) {
+            workbook.write(fis);
+            JOptionPane.showMessageDialog(this, "Exported successfully!");
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error");
+        }
+    }
+
+    public static void exportToPDFBox(File file, JTable productTable, float[] columnWidths) throws IOException {
+        PDDocument document;
+        document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+        document.addPage(page);
+
+        PDPageContentStream contentStream;
+        contentStream = new PDPageContentStream(document, page);
+        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+        float margin = 20;
+        float yStart = page.getMediaBox().getHeight() - margin;
+        float tableWidth = page.getMediaBox().getWidth() - 2 * margin;
+        float yPosition = yStart;
+        float bottomMargin = 70;
+        float yStartNewPage = page.getMediaBox().getHeight() - margin;
+        boolean drawContent = true;
+        float lineHeight = 15;
+        float cellMargin = 2f;
+
+        List<List<String>> tableData = new ArrayList<>();
+
+        // Thêm dòng tiêu đề
+        List<String> headerRow = new ArrayList<>();
+        headerRow.add("STT");
+        headerRow.add("PRODUCTCODE");
+        headerRow.add("PRODUCTNAME");
+        headerRow.add("COSTPRICE");
+        headerRow.add("SELLPRICE");
+        headerRow.add("BRAND");
+        headerRow.add("QUANTITY");
+        headerRow.add("DATE");
+
+        tableData.add(headerRow);
+
+        int rowCount = productTable.getRowCount();
+        int colCount = productTable.getColumnCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            List<String> dataRow;
+            dataRow = new ArrayList<>();
+            dataRow.add(String.valueOf(i + 1));
+
+            for (int col = 0; col < colCount; col++) {
+                Object cellValue = productTable.getValueAt(i, col);
+                if (cellValue != null && !cellValue.toString().contains("ImageIcon")) {
+                    dataRow.add(cellValue.toString());
+                }
+            }
+
+            tableData.add(dataRow);
+        }
+
+        drawTable(page, contentStream, yStart, tableWidth, yStartNewPage, bottomMargin, lineHeight, cellMargin, drawContent, tableData, columnWidths);
+
+        contentStream.close();
+
+        try {
+            document.save(file);
+            JOptionPane.showMessageDialog(null, "Exported successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error");
+        } finally {
+            document.close();
+        }
+    }
+
+    private static void drawTable(PDPage page, PDPageContentStream contentStream, float yStart, float tableWidth,
+            float yPosition, float bottomMargin, float lineHeight, float cellMargin, boolean drawContent,
+            List<List<String>> tableData, float[] columnWidths) throws IOException {
+        float margin = 20;
+        float yStartNewPage = page.getMediaBox().getHeight() - margin;
+        float tableBottomY = yStartNewPage - tableData.size() * lineHeight;
+
+        // Calculate the required table height
+        float rowHeight = 20;
+        float tableHeight = rowHeight * tableData.size();
+
+        // Adjust table height if it exceeds the available space
+        if (tableHeight > (yStartNewPage - bottomMargin - yPosition)) {
+            tableHeight = yStartNewPage - bottomMargin - yPosition;
+        }
+
+        // Draw horizontal line at the top
+        contentStream.moveTo(margin, yStartNewPage);
+        contentStream.lineTo(margin + tableWidth, yStartNewPage);
+        contentStream.stroke();
+
+        // Draw table content
+        if (drawContent) {
+            contentStream.setLineWidth(1f);
+            float yPositionNewPage = yStartNewPage;
+
+            for (List<String> rowData : tableData) {
+                // Vẽ đường kẻ dọc cho cột STT
+                contentStream.moveTo(margin, yPositionNewPage);
+                contentStream.lineTo(margin, yPositionNewPage - rowHeight);
+
+                float xPosition = margin; // Khởi tạo xPosition với giá trị margin
+
+                for (int j = 0; j < rowData.size(); j++) {
+                    // Vẽ đường kẻ dọc từ xPosition đến xPosition + columnWidths[j]
+                    contentStream.moveTo(xPosition + columnWidths[j], yPositionNewPage);
+                    contentStream.lineTo(xPosition + columnWidths[j], yPositionNewPage - rowHeight);
+
+                    // Vẽ text trong ô
+                    String text = rowData.get(j);
+                    contentStream.beginText();
+                    contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+                    contentStream.newLineAtOffset(xPosition + cellMargin, yPositionNewPage - 15);
+                    contentStream.showText(text);
+                    contentStream.endText();
+
+                    // Cập nhật xPosition cho cột tiếp theo
+                    xPosition += columnWidths[j];
+                }
+
+                // Draw horizontal line at the bottom, extending only up to the last column
+                contentStream.moveTo(margin, yPositionNewPage - rowHeight);
+                contentStream.lineTo(xPosition, yPositionNewPage - rowHeight);
+
+                yPositionNewPage -= rowHeight;
+            }
+
+            // Draw vertical line at the end of the last row
+            contentStream.moveTo(margin + tableWidth, yPositionNewPage + rowHeight);
+            contentStream.lineTo(margin + tableWidth, yPositionNewPage);
+
+            contentStream.stroke();
+        }
+    }
+
+    private String getFileExtension(File file) {
+        String fileName = file.getName();
+        int lastDotIndex = fileName.lastIndexOf(".");
+        if (lastDotIndex != -1 && lastDotIndex < fileName.length() - 1) {
+            return fileName.substring(lastDotIndex + 1).toLowerCase();
+        }
+        return "";
+    }
+
     private File showFileChooser() {
         JFileChooser fileChooser = new JFileChooser();
 
-        // Thêm bộ lọc cho phép chọn tệp với phần mở rộng là ".xlsx"
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx");
-        fileChooser.setFileFilter(filter);
+        // Thêm bộ lọc cho phép chọn tệp với phần mở rộng là ".xlsx" hoặc ".pdf"
+        FileNameExtensionFilter excelFilter = new FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx");
+        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Files (*.pdf)", "pdf");
+        fileChooser.addChoosableFileFilter(excelFilter);
+        fileChooser.addChoosableFileFilter(pdfFilter);
+
+        // Set bộ lọc mặc định là ".xlsx"
+        fileChooser.setFileFilter(excelFilter);
 
         int option = fileChooser.showSaveDialog(this);
 
         if (option == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
 
-            // Kiểm tra nếu phần mở rộng là ".xlsx", nếu không, thêm nó vào
+            // Kiểm tra phần mở rộng của tệp đã chọn và thêm nó nếu cần
+            String extension = "";
+
+            // Kiểm tra xem người dùng đã chọn bộ lọc PDF hay không
+            if (fileChooser.getFileFilter().equals(pdfFilter)) {
+                extension = ".pdf";
+            } else {
+                extension = ".xlsx";
+            }
+
             String filePath = selectedFile.getAbsolutePath();
-            if (!filePath.toLowerCase().endsWith(".xlsx")) {
-                selectedFile = new File(filePath + ".xlsx");
+            if (!filePath.toLowerCase().endsWith(extension)) {
+                selectedFile = new File(filePath + extension);
             }
 
             return selectedFile;

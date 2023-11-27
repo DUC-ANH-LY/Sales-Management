@@ -172,14 +172,8 @@ public class ProductDAO {
     // Methods to add a new product
     public void addProductDAO(ProductDTO productDTO) throws FileNotFoundException {
         try {
-            String query = "SELECT * FROM products WHERE productname='"
-                    + productDTO.getProdName()
-                    + "' AND costprice='"
-                    + productDTO.getCostPrice()
-                    + "' AND sellprice='"
-                    + productDTO.getSellPrice()
-                    + "' AND brand='"
-                    + productDTO.getBrand()
+            String query = "SELECT * FROM products WHERE productcode='"
+                    + productDTO.getProdCode()
                     + "'";
             resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
@@ -205,13 +199,7 @@ public class ProductDAO {
             prepStatement.setInt(7, productDTO.getQuantity());
             prepStatement.setString(8, productDTO.getDate());
 
-            String query2 = "INSERT INTO currentstock VALUES(?,?)";
-            prepStatement2 = conn.prepareStatement(query2);
-            prepStatement2.setString(1, productDTO.getProdCode());
-            prepStatement2.setInt(2, productDTO.getQuantity());
-
             prepStatement.executeUpdate();
-            prepStatement2.executeUpdate();
             JOptionPane.showMessageDialog(null, "Product added and ready for sale.");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -292,13 +280,7 @@ public class ProductDAO {
                 prepStatement.setString(7, productDTO.getDate());
             }
 
-            String query2 = "UPDATE currentstock SET quantity=? WHERE productcode=?";
-            prepStatement2 = conn.prepareStatement(query2);
-            prepStatement2.setInt(1, productDTO.getQuantity());
-            prepStatement2.setString(2, productDTO.getProdCode());
-
             prepStatement.executeUpdate();
-            prepStatement2.executeUpdate();
             JOptionPane.showMessageDialog(null, "Product details updated.");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -332,6 +314,8 @@ public class ProductDAO {
                 prepStatement.setInt(1, quantity);
                 prepStatement.setString(2, code);
                 prepStatement.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Product has been updated.");
+
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -409,7 +393,9 @@ public class ProductDAO {
                 prodCode = resultSet.getString("productcode");
                 quantity = resultSet.getInt("quantity");
             }
-            if(quantity <= 0)   JOptionPane.showMessageDialog(null, "Product sold out!");
+            if (quantity <= 0) {
+                JOptionPane.showMessageDialog(null, "Product sold out!");
+            }
             if (productDTO.getQuantity() > quantity) {
                 JOptionPane.showMessageDialog(null, "This quantity greater than available for this product.");
             } else if (productDTO.getQuantity() <= 0) {
@@ -456,8 +442,6 @@ public class ProductDAO {
         return resultSet;
     }
 
-  
-
     // Sales table data set retrieval
     public ResultSet getSalesInfo() {
         try {
@@ -479,7 +463,7 @@ public class ProductDAO {
     // Search method for products
     public ResultSet getProductSearch(String text) {
         try {
-            String query = "SELECT productcode,productname,costprice,sellprice,fullname,quantity,added_date,image FROM products join suppliers on products.spid = suppliers.sid "
+            String query = "SELECT productcode,productname,costprice,sellprice,fullname,quantity,added_date,image FROM products join suppliers on products.brand = suppliers.fullname "
                     + "WHERE productcode LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' OR brand LIKE '%" + text + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
